@@ -1,6 +1,6 @@
 ---
 title: "APIs and Twitter"
-output: html_notebook
+output: github_document
 ---
 
 ![](API0.png)

@@ -1,0 +1,250 @@
+---
+title: "rvest and scraping"
+output: github_document
+---
+
+---
+title: "Amazon Scraper"
+output: github_document
+---
+
+# Rvest is for scraping!
+
+So, install and load it with pacman!
+
+```{r}
+pacman::p_load(tidyverse,rvest)
+```
+
+This is a guide for R users to automate the copy-paste into a dataset (scrape) of public user-generated content on Amazon. In this example we will scrape the reviews of the users to a jar of italian pesto, but this guide will help you to understand how to efficiently download many kind of public information from websites.
+
+### Packages
+
+I use a very efficient package for installing and loading the necessary packages for scraping, that is `pacman`. In particular, `pacman::p_load(name_of_package_1, name_of_package_2,...)` will check if the packages are installed and, if not, it will install them.
+
+```{r}
+pacman::p_load(tidyverse,rvest)
+```
+
+# rvest is a great scraper!
+
+To my knowledge, there are essentially 3 free software for scraping things on Internet. We are going to use `rvest`. It is quite easy, intuitive and well-responding. Alternatives are `BeautifulSoup` for Python and Selenium (`RSelenium`). `BeautifulSoup` is conceptually the same of `rvest` so it's only a matter of personal taste, but Selenium and `rvest` works differently.
+
+`rvest` will connect R to the back-end code of any adress where you send it. It always work on crawling the whole code behind a internet page and then your code will select only the user-generated content of interest.
+
+Selenium will set up a bot crawler on a browser that can be guided to perform some actions and literally copy-past elements front-end of the internet page.
+
+In my experience, once setup correctly, Selenium can be even more responsive than `rvest`, because what you (would) see is what you (will) get. This is very useful for scraping websites that relies heavily on Javascripts.
+
+For example, I had to use Selenium to scrape Adults Only content on the website Steam, because to access to the back-code of 18+ content one have before to click on a button of consent. To my knowledge, while `rvest` has a syntax for interacting with elements of front-end, I was never truly able to make it work consistently.
+
+However, I also feel that a correct setup of Selenium is a pain in the ankle to code, and that `rvest` is an excellent beginning. Overall, since Selenium have to synchs to a browser, is also slower than `rvest`.
+
+## rvest main commands
+
+The main commands of rvest are:
+
+* `read_html(URL)`: this commands R to go to a URL and to start watching for the back code of that website addressed at the `URL`.
+* `html_elements("selector")`: this is just a filter. To code correctly how to word the `("selector")` is the hard part of any scraping activity. In my opinion, is mostly a work of deduction and reverse engineering.
+I think that techniques for deducting the correct selector almost need a guide on their own, but I will try to give my mental tips at the end of this one.
+* `html_text()`: this will just convert your selection of elements in a vector of `character`. Sometimes you don't want a `character`, but a `numeric`, but in my opinion having everything scraped as text before pre-processing text will help a lot debugging and it's generally a good practice.
+
+# Scraping pesto!
+
+In this example we want to collect the reviews for a jar of italian pesto. In particular, we will scrape the reviews from Amazon.it, that is the Italian Amazon.
+
+So, we need to set the `URL` of `read_html()` as the address of the webpage for the reviews
+
+```{r}
+URL = "https://www.amazon.it/product-reviews/B00XUGZRL8/ref=cm_cr_getr_d_paging_btm_next_2?ie=UTF8&filterByStar=all_stars&reviewerType=all_reviews&pageNumber="
+read_html(URL)
+```
+
+Now, in theory, we could proceed to select only the part of content of our interest, for example the text of the reviews:
+
+```{r}
+read_html(URL) %>%
+  html_elements(".review-text-content span") %>%
+  html_text() -> reviews
+reviews %>% head(2)
+```
+
+### Sometimes you want to scrape a link.
+
+More in general, sometimes you want to scrape an `html`-attribute. What is an attribute? Is a code that modifies or 'augment' the front-end of the content called in the code. Most of the times, you just want to scrape a link, that is exactly an augment of a text or an image.
+
+For example, for linking something in Markdown, the language behind this document, you have to back-end this format: `[text](link)`. Taking this metaphor in mind, the equivalent in `rvest` would be to select (`html_elements`) the `[text]`, but then to extract the `(link)` attribute, not the text in itself. In `rvest`, this is done with the command `html_attr("href")`.
+
+```{r}
+read_html(URL) %>%
+  html_elements("#cm_cr-review_list .a-profile") %>%
+  html_attr("href")
+```
+This is a list of all the times that `rvest` finds a list of link associated to usernames, in the list of reviews for that URL. We would expect only a list of 10 elements, but it may be more. This is because Amazon code is not exactly very tidy, so I wrapped the code with a fix that will leave only unique links.
+
+```{r}
+read_html(URL) %>%
+  html_elements("#cm_cr-review_list .a-profile") %>%
+  html_attr("href") %>%
+  str_remove("\\/ref.*") %>%
+  unique()
+```
+Much tidier, right?
+
+In theory, you can also extract all the attributes of the selected content with `html_attr()`, but I don't think it's really useful.
+
+# Ready for scraping the whole thing?
+
+There are a bunch of issues to solve, here:
+
+* It only scraped 10 reviews. Why?
+* This text has no author, no date, no score...
+
+Let's solve these issue!
+
+## Infer the number of pages to scrape
+
+The scraper downloaded only 10 reviews because in the URL that I provided there are those 10. There are other reviews for the jar of pesto in Amazon, but they are in other URLs. Luckily, it's quite easy to infer where these are...
+
+For example...
+
+```{r}
+read_html(URL %>% str_c("2")) %>%
+  html_elements(".review-text-content span") %>%
+  html_text() -> reviews
+reviews %>% head(2)
+```
+
+I only added a number after the URL, now th scraper know that it has to go to page 2 of reviews. Almost all websites are organized exactly in this way. I already pre-coded the URL of Amazon in a way that I only need to add one number to jump into that webpage, and you should try to do the same, understanding the structure of the URL code.
+
+`https://www.amazon.it/product-reviews/B00XUGZRL8/ref=cm_cr_getr_d_paging_btm_next_2?ie=UTF8&filterByStar=all_stars&reviewerType=all_reviews&pageNumber=`
+
+In this case `&pageNumber=` ends the address; this is the reason why the trick with %>% str_c("2") works. You should adapt to the website that you want to scrape and arrange accordingly the address. Usually website have front-ends elements, like buttons or drop-down menus that will help you with it.
+
+So, which is the number of pages for the jar of pesto?
+
+On Amazon it is not explicit, however it is explicit the number of written reviews, that can be selected from the main `URL` with a specific selector.
+
+```{r}
+read_html (URL) %>%
+  html_node("#filter-info-section span") %>% html_text
+```
+
+The information is here, but we need to polish it. The number we are looking for is "290 recensioni globali".
+
+```{r}
+read_html (URL) %>%
+  html_elements("#filter-info-section span") %>% html_text %>% word(25) %>%
+  as.integer() -> nrev
+nrev
+```
+Finally, if for each 10 reviews will be generated a new page on Amazon, then the number of pages is...
+
+```{r}
+ceiling(nrev / 10) -> lastpage
+lastpage
+```
+
+## The best way to organize a scraped dataset
+
+Information on timestap, author, text and score goes in parallel, in the sense that there is one author per review, etc.
+
+The ideal data structure to organize parallel observation of different features is the `tibble`, and it is certainly viable to just declare a `tibble` with a fixed number of row and then fill it procedurally with the scraped content.
+
+However, I think that the best method is to fill separate `vectors` and only after the scraping to convert them in a `tibble`. For many `vectors`, the good practice is to organize them in a `list` and then convert the `list` into a `tibble`. I do not like to work with `list` syntax, and `list` are very annoying to browse, but once the coding is done the whole operations are much more smooth.
+
+```{r}
+reviews = list()
+```
+
+```{r}
+for (i in 1:lastpage) {
+  
+read_html(URL %>% str_c(i)) -> x
+  
+reviews$Product[(1+(i-1)*10):(i*10)] = "Pesto Jar"
+  
+    # Timestamp  
+  x %>% html_elements("#cm_cr-review_list .review-date") %>%
+    html_text() -> reviews$Time[(1+(i-1)*10):(i*10)]
+  
+    # Userpage link
+  x %>% html_elements("#cm_cr-review_list .a-profile") %>%
+  html_attr("href") %>%
+  str_remove("\\/ref.*") %>%
+  unique() -> reviews$User[(1+(i-1)*10):(i*10)]
+  
+    # Score
+  x %>% html_elements("#cm_cr-review_list .review-rating") %>%
+    html_text() -> reviews$Score[(1+(i-1)*10):(i*10)]
+  
+    # Comment
+  x %>% html_elements(".review-text-content span") %>%
+    html_text() %>% .[. != ""] -> reviews$Text[(1+(i-1)*10):(i*10)]
+}
+```
+
+```{r}
+db = as_tibble(reviews)
+db
+```
+
+Yes, the `db` needs a bit more of cleaning, but this is higly dependent by the Amazon website you are going to scrape. These data are in Italian. In my experience the different languages requires slightly different workflows, and unfortunately I cannot say that the selectors in `html_elements` are the same across languages...
+
+### Why a for cycle?
+
+Why a `for` cycle and not something fancier, like a `map_*`? In my experience, everytime you have to connect to a website you always want a slow, procedural, controlled `for` cycle.
+
+
+# Tell me more about CSS selectors
+
+There are two ways for fishing for selectors:
+
+* [SelectorGadget](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb)
+* Inspecting the back-end code of the webpage
+
+My suggestion is to watch a video-guide on SelectorGadget and start playing with it in simpler websites. Amazon is not very simple. The key idea to memorize is that you always start highliting in green something in the front-end that you want to scrape for sure, then you localize elements that you want to be out of the selection. SelectorGadget will highlight these in red. In the end it should provide a CSS selector code to insert in the `html_elements()` command.
+
+Personally, I prefer go searching within the `html` code of the page.
+My strategy is something like this:
+
+* I decide an example of front-end text that I want to scrape
+* I look for the position of that text in the back-end code
+* I try to deduce the class (`class=something`) of that elements. Often that class is in common with all the other elements with the same functions (e.g. the score)
+* `html_elements(".something")`
+
+Sometimes I need to scrape `html_elements(".something")` only within a section of the page; for example, look in the code above that I select with:
+
+`html_elements("#cm_cr-review_list .review-rating")`
+
+The function of `#cm_cr-review_list` is to limit the selection only within a section of the webpage called `cm_cr-review_list` in the `html` code of the webpage.
+
+# Why to limit only to a jar of pesto?
+
+In theory, every single product on Amazon can be scraped. Sometimes it is useful to make a collection of similar items.
+
+There are many ways to do so. I think that the most reliable would be to collect in a `tibble`:
+
+* the product ID (e.g. "Pesto Jar")
+* all the webpages associated to their `pageNum`
+* the lastpage for each ID
+
+Let's name this `tibble` as `URL_list`
+
+Then , instead of reading the `html` code from
+
+`read_html(URL %>% str_c(i)) -> x`
+
+the `for` cycle would iterate `x` across
+
+`read_html(URL_list$URL[i]) -> x`.
+
+The final `db` would look like this:
+
+```{r}
+tibble(Product = c("Pesto Jar","Pesto Jar","Tuna Can"),
+       Time = c("Monday","Tuesday","Sunday"),
+       User = c("Donald","Goofy","Donald"),
+       Score = c(4,5,2)
+)
+```

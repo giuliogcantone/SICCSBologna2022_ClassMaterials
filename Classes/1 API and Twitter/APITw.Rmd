@@ -76,7 +76,7 @@ gutenberg_metadata %>%
 gutenberg_download(30984) -> Sicilia
 ```
 
-Notice that this book need to be cleansed!
+This book needs to be cleansed!
 
 ```{r}
 Sicilia %>% select(text)
@@ -85,5 +85,9 @@ Sicilia %>% select(text)
 Usually books in **English** come already cleansed, in **other languages** not.
 
 ---
-Napoleone Colajanni (1847 - 1921): Sicilian sociologist. He wrote about crime and racism and was a rival to Cesare Lombroso. 
+Napoleone Colajanni (1847 - 1921): Sicilian sociologist.
+
+He wrote about crime and racism and was a rival to Cesare Lombroso.
 ---
+
+

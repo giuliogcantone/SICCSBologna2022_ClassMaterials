@@ -13,12 +13,14 @@ The schedule for the classes is:
 - Wedsnday 8 June 2PM: Web scraping with rvest
 - Thursday 9 June 2PM: How to perform tidytext
 
-Each lesson is programmed to last 1 hr.
+But the schedule is flexible enough (indeed, you will find more than 3 classes!)
+
+Each lesson is programmed to last 1 hr (and something).
 Students are encouraged to stay for 30 mins. more to discuss advanced details of the scheduled topics.
 
 Examples of in-depth details:
 
-- What are regular expressions for text cleansing?
+- How to text cleansing?
 - How to automate scraping of multiple pages?
 - Why sentiment analysis is a week tool and how to improve its reliability?
 
@@ -26,7 +28,7 @@ Examples of in-depth details:
 
 ---
 
-# Important
+# Important: PACMAN
 
 Please download the package "pacman".
 

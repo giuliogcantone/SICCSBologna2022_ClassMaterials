@@ -112,7 +112,7 @@ All you need to know is that historically there are two different protocols to a
 
 API v2 are newer and generally they are better. 
 
-Again, since we are academics that aim to get API v2, we will use `academictwitteR'. [Intro to it](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
+Again, since we are academics that aim to get API v2, we will use `academictwitteR`. [Intro to it](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
 
 `academictwitteR' is a API Wrapper for R.
 

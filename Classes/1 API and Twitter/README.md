@@ -120,7 +120,7 @@ protocols to access to Twitter API
 API v2 are newer and generally they are better.
 
 Again, since we are academics that aim to get API v2, we will use
-\`academictwitteR’. [Intro to
+`academictwitteR`. [Intro to
 it](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
 
 \`academictwitteR’ is a API Wrapper for R.

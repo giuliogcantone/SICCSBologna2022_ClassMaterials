@@ -1,6 +1,6 @@
 ---
 title: "Project Giletti"
-output: html_notebook
+output: github_document
 ---
 
 ```{r}
@@ -9,7 +9,7 @@ pacman::p_load(tidyverse,
                )
 ```
 
-```{r}
+```{r eval=FALSE}
 get_user_id("GilettiMassimo") %>% get_user_followers() -> MGfollowers
 ```
 

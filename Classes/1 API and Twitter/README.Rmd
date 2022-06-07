@@ -201,4 +201,10 @@ academictwitteR::get_user_tweets(
 ```{r eval = F}
 get_user_id("JoeBiden") %>% get_user_following() -> JBfollwing0
 ```
+### OTHER API
 
+If you are interested in Sociology of Science (Science of Science?) you may be interested in OpenAlex.
+
+OpenAlex is a huge database of info about academic products in the same way that Gutemberg is a database of old books. However, OpenAlex use an API protocol. Look at [how they self-document the principle behind API](https://docs.openalex.org/api).
+
+Their API are native in Java language, however someone (an Italian professor, in this case) made an [API Wrapper for R](https://github.com/massimoaria/openalexR).

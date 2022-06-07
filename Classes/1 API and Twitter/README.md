@@ -123,7 +123,7 @@ Again, since we are academics that aim to get API v2, we will use
 `academictwitteR`. [Intro to
 it](https://cran.r-project.org/web/packages/academictwitteR/vignettes/academictwitteR-intro.html).
 
-\`academictwitteR’ is a API Wrapper for R.
+`academictwitteR` is a API Wrapper for R.
 
 API and API Wrappers are like “jacks” that allow to stream data sharing
 between a platform and qualified user in an alternative way,

@@ -20,7 +20,8 @@ Before digging into API and Twitter, let's explore the concept of
 ### R Packages that allow to connect and download observational data (even without API)
 
 First of all, let be sure that "pacman" is installed in your library.
-With pacman we will install and activate some useful packages
+With pacman we will install and activate some useful packages.
+
 
 ```{r}
 pacman::p_load("owidR",
@@ -64,9 +65,9 @@ With this code we are going to count how many book per language are stored in [P
 
 ```{r eval=F}
 pacman::p_load(tidyverse)
-gutenberg_metadata() %>%
+gutenberg_metadata %>%
   group_by(language) %>%
-  count()
+  count() %>% View()
 ```
 
 The catalogue can be filtered with `tidyverse` functions.
@@ -140,7 +141,7 @@ There are 4 main functions that you want to know for sure:
 
 - `academictwitteR::get_all_tweets`: download all the tweets related to a topic (NOTE: it seems to me that the topic is not just a "token" but really an ontological concept) in a timeframe
 
-- `academictwitteR::get_user_timeline`: download last 3.200 tweets from a user. (This is actually deprecated, I will explain this concept in the class)
+- `academictwitteR::get_user_tweets`: download last 3.200 tweets from a user. (This is actually deprecated, I will explain this concept in the class)
 
 - `academictwitteR::get_user_following` and `academictwitteR::get_user_followers` are quite self-explanatory
 
@@ -158,6 +159,7 @@ academictwitteR::get_all_tweets(
 ) -> My_collection
 
 ```
+
 
 Focus your attention on `bearer_token`. This argument is a "password" that allows to connect your R Studio to your qualified for API 2 account.
 
@@ -193,7 +195,7 @@ pacman::p_load(academictwitteR)
 academictwitteR::get_user_tweets(
   "JoeBiden",
   start_tweets = "2022-05-01T00:00:00Z",
-  end_tweets = "2022-05-02T00:00:00Z",
+  end_tweets = "2022-05-10T00:00:00Z",
   n=500
 ) -> JB
 ```

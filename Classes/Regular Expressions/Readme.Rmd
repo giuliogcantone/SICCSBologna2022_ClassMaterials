@@ -27,6 +27,7 @@ A regular expression is a sequence of symbols that represent a large family of s
 
 A famous regular expression is `"."` within a string. It means: "anything that is not a new line (`"\n"`). So if one looks for `"a."`, is looking for `"ab"`,`"ac"`,`"ad"`,`"aò"`,`"aä"`,`"a?"`... anything that is not `a\n`.
 
+
 How can one look for only et exactly `a.`? You put `\` before a regular expression, to negate the regular expression function. So, you need to write: `"\a."`
 
 Sometimes regular expressions are write extensively, like "[:digit:]" looks for symbols of numbers (not numbers! symbols of number!).

@@ -3,11 +3,6 @@ title: "rvest and scraping"
 output: github_document
 ---
 
----
-title: "Amazon Scraper"
-output: github_document
----
-
 # Rvest is for scraping!
 
 So, install and load it with pacman!
@@ -40,6 +35,7 @@ Overall, since Selenium have to synch into a browser, is also slower than `rvest
 
 The main commands of rvest are:
 
+
 * `read_html(URL)`: R to go to a URL and to start watching for the back code of that website addressed at the `URL`.
 * `html_elements("[selector]")`: this is just a filter. To code correctly how to write the `("[selector]")` is the **hard part** of scraping. In my opinion, is mostly a work of deduction and reverse engineering.
 * `html_text()`: this will just convert your selection of elements in a vector of `character`. Sometimes you don't want a `character`, but a `numeric`, but in my opinion having **everything scraped as text before pre-processing text will help a lot debugging and it's generally a good practice**.
@@ -60,9 +56,9 @@ Now, in theory, we could proceed to select only the part of content of our inter
 ```{r}
 read_html(URL) %>%
   html_elements(".review-text-content span") %>% #NOTICE THE SELECTOR!
-  html_text() -> reviews
-reviews %>% head(2)
+  html_text() %>% head(5)
 ```
+
 
 ### Sometimes you want to scrape a link.
 
@@ -160,7 +156,15 @@ However, I think that the best method is to fill separate `vectors` and only aft
 reviews = list()
 ```
 
-```{r eval=FALSE}
+
+```{r}
+a = 20
+
+"My age is " %>% str_c(a)
+```
+
+
+```{r}
 for (i in 1:lastpage) {
   
 read_html(URL %>% str_c(i)) -> x

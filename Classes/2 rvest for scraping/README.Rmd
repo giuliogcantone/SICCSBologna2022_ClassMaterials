@@ -34,7 +34,7 @@ Just for your knowledge, some academic journals protects their articles from web
 
 However, I also feel that a correct setup of Selenium is a pain in the ankle to code, and that `rvest` is an excellent beginning.
 
-Overall, since Selenium have to synchs to a browser, is also slower than `rvest`.
+Overall, since Selenium have to synch into a browser, is also slower than `rvest`.
 
 ## rvest main commands
 

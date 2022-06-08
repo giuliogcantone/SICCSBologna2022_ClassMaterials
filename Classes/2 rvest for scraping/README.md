@@ -40,8 +40,8 @@ from web scraping in this way, but not all of them!
 However, I also feel that a correct setup of Selenium is a pain in the
 ankle to code, and that `rvest` is an excellent beginning.
 
-Overall, since Selenium have to synchs to a browser, is also slower than
-`rvest`.
+Overall, since Selenium have to synch into a browser, is also slower
+than `rvest`.
 
 ## rvest main commands
 
@@ -161,47 +161,6 @@ Much tidier, right?
 
 ------------------------------------------------------------------------
 
-# Regular expressions
-
-THEY ASKED ME TO TEACH YOU REGULAR EXPRESSION.
-
-REGULAR EXPRESSIONS ARE THE BANE OF COMPUTATIONAL SOCIAL SCIENCE
-
-Computer scientists seem to lack the capacity to explain what a regular
-expression is to a social scientist. Check the superca\*\*o\*a of
-Italian Wikipedia (translation in mine):
-
-|                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| A regular expression is a sequence of symbols (then a string) that identifies a set of strings. They can define all and only the regular languages. Kleene’s Theorem says that the class of regular languages corresponds to the class of languages generated from type-3 grammars (in Chomsky’s hierarchy) and recognized by finite status automata. However, in practice, exist some constructs (for example, backreference constructs) that allow to amplify the set of defined languages. Different programs support different notations to express the same regular expression, hence an “universal” syntax do not exist. |
-
-Now, my definition of Regular Expression:
-
-|                                                                                                                                                                                                                   |
-|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| A regular expression is a method of symbolic logic to identify a class of sequences of symbols. It allows to refer at the same time to more than one sequence of symbols, but with one representation of symbols. |
-
-A regular expression is a symbol that represent a family of symbols.
-
-The most famous regular expression is `"."` within a string. It means:
-“anything that is not a new line (`"\n"`). So if one looks for `"a."`,
-is looking for `"ab"`,`"ac"`,`"ad"`,`"aò"`,`"aä"`,`"a?"`… anything that
-is not `a\n`.
-
-How can one look for only et exactly `a.`? You put `\` before a regular
-expression, to negate the regular expression function. So, you need to
-write: `"\a."`
-
-Sometimes regular expressions are write extensively, like “\[:digit:\]”
-looks for symbols of numbers (not numbers! symbols of number!).
-
-The truth is that regular expressions are 10% understanding and 90%
-memory, and are often stupid, so just [take this
-sheet](https://www.r-bloggers.com/2017/11/new-rstudio-cheat-sheet-strings-in-r/)
-and let’s end this atrocity.
-
-------------------------------------------------------------------------
-
 # Ready for scraping the whole thing?
 
 There are a bunch of issues to solve, here:
@@ -255,7 +214,7 @@ read_html (URL) %>%
   html_node("#filter-info-section span") %>% html_text
 ```
 
-    ## [1] "\n                    1.285 valutazioni globali | 297 recensioni globali\n                "
+    ## [1] NA
 
 The information is here, but we need to polish it. The number we are
 looking for is “290 recensioni globali”.
